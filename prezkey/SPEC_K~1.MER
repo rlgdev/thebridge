@@ -1,0 +1,74 @@
+sequenceDiagram
+    autonumber
+    actor Dev as Developer
+    participant SK as Spec Kit
+    participant CA as Code Assistant
+    participant LLM as LLM
+    box rgba(120, 170, 200, 0.10) MCP servers
+    participant CON as Confluence
+    participant JIRA as Jira
+    end
+    box rgba(200, 160, 80, 0.10) Corporate-standard skills
+    participant MK as Maker skills
+    participant CK as Checker skills
+    end
+
+    Dev->>CA: build the feature
+    CA->>CON: fetch feature spec (via MCP)
+    CON-->>CA: feature description
+
+    rect rgba(130, 110, 200, 0.06)
+    Note over Dev,CK: 1 - Constitution (encode your standards)
+    CA->>MK: apply standards
+    MK-->>CA: principles and guardrails
+    loop reason and draft
+        CA->>LLM: draft constitution
+        LLM-->>CA: draft
+    end
+    CA->>SK: /constitution
+    SK-->>CA: constitution.md
+    end
+
+    rect rgba(130, 110, 200, 0.06)
+    Note over Dev,CK: 2 - Specify, plan and tasks (you steer)
+    CA->>MK: apply standards
+    MK-->>CA: drafting guidance
+    loop reason and draft
+        CA->>LLM: draft spec
+        LLM-->>CA: draft
+    end
+    CA->>SK: /specify
+    SK-->>CA: spec.md
+    CA->>CK: review spec
+    CK-->>CA: pass or issues
+    CA->>Dev: /clarify questions
+    Dev-->>CA: answers and edits
+    CA->>SK: /plan
+    SK-->>CA: plan.md
+    CA->>SK: /tasks
+    SK-->>CA: tasks.md
+    CA->>JIRA: create tickets from tasks
+    JIRA-->>CA: ticket IDs
+    CA->>Dev: review the drafts
+    Dev-->>CA: approve to build
+    end
+
+    rect rgba(130, 110, 200, 0.06)
+    Note over Dev,CK: 3 - Implement
+    CA->>JIRA: pull next ticket
+    JIRA-->>CA: ticket details
+    CA->>MK: apply standards
+    MK-->>CA: coding guidance
+    loop agentic loop - generate, write files, run tests
+        CA->>LLM: generate code
+        LLM-->>CA: code and next action
+    end
+    CA->>SK: /implement
+    SK-->>CA: code + tests
+    CA->>CK: review code
+    CK-->>CA: pass or fix
+    end
+
+    CA-->>Dev: ready for review
+    Dev->>JIRA: close ticket (human gate)
+    Note over Dev,JIRA: loop back - iterate on feedback
